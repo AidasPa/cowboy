@@ -246,9 +246,9 @@ websocket_handshake(State=#state{key=Key},
 		<< Key/binary, "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" >>)),
 	%% @todo We don't want date and server headers.
 	Headers = cowboy_req:response_headers(#{
-		<<"connection">> => <<"Upgrade">>,
-		<<"upgrade">> => <<"websocket">>,
-		<<"sec-websocket-accept">> => Challenge
+		<<"Connection">> => <<"Upgrade">>,
+		<<"Upgrade">> => <<"websocket">>,
+		<<"Sec-Websocket-Accept">> => Challenge
 	}, Req),
 	Pid ! {{Pid, StreamID}, {switch_protocol, Headers, ?MODULE, {State, HandlerState}}},
 	{ok, Req, Env};

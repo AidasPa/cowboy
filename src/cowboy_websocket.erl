@@ -245,11 +245,11 @@ websocket_handshake(State=#state{key=Key},
 	Challenge = base64:encode(crypto:hash(sha,
 		<< Key/binary, "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" >>)),
 	%% @todo We don't want date and server headers.
-	Headers = cowboy_req:response_headers(#{
+	Headers = #{
 		<<"Connection">> => <<"Upgrade">>,
 		<<"Upgrade">> => <<"websocket">>,
-		<<"Sec-Websocket-Accept">> => Challenge
-	}, Req),
+		<<"Sec-WebSocket-Accept">> => Challenge
+	},
 	Pid ! {{Pid, StreamID}, {switch_protocol, Headers, ?MODULE, {State, HandlerState}}},
 	{ok, Req, Env};
 %% For HTTP/2 we do not let the process die, we instead keep it
@@ -651,7 +651,7 @@ is_close_frame(_) -> false.
 
 -spec websocket_close(#state{}, any(), terminate_reason()) -> no_return().
 websocket_close(State, HandlerState, Reason) ->
-	websocket_send_close(State, Reason),
+	% websocket_send_close(State, Reason),
 	terminate(State, HandlerState, Reason).
 
 websocket_send_close(State, Reason) ->
